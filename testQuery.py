@@ -36,7 +36,7 @@ def scrapeurl(url, out, updates=False, reasons=False):
         json.dump(json.loads(response_data), out, indent=4)
         out.write('\n')
 
-fields = ['title','signature_count','goal','creator_name','organization_name','targets'#,'overview'
+fields = ['title','signature_count','goal','creator_name','organization_name','targets','overview','creator_url'
 ]
 additional_parameters = {
     #'petition_url' : petition_url

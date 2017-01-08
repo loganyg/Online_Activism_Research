@@ -1,0 +1,52 @@
+PETITIONS:
+	Petition ID
+	Petition URL
+	Title
+	Goal
+	Creator Name
+	Creator URL
+	Creator ID (?)
+	Organization Name
+	Organization URL
+	Overview
+	Created At
+	Category
+	Targets :  PETITION_TARGETS will map petitions to entries in TARGETS
+	Signature Count : TBD, Will this map to SIGNATURES, with ~210 columns
+		(one for each projected day)   OR   Have it map to SIGNATURES
+		which stores a row for each day for each petition.
+UPDATES: 
+	Petition ID
+	Author Name
+	Author URL
+	Created At
+	Content
+	Title
+REASONS:
+	Petition ID
+	Created At
+	Author Name
+	Author URL
+	Like Count : TBD, in the same way as Signature Count. Including this
+	will greatly increase the amount of queries made and data stored, 
+	more than anything else.
+USERS:
+	User Name
+	User URL
+	User ID : This will map to USERS_PETITIONS.
+TARGETS: 
+	Target ID : This will have to be assigned, and will map to 
+		PETITION_TARGETS
+	Name
+	Title
+	Type
+	Target Area
+SIGNATURES:
+	Petition ID
+	TBD, see Signature Count.
+PETITION_TARGETS:
+	Petition ID
+	Target Name
+USER_PETITIONS:
+	User ID
+	Petition ID
