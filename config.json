@@ -1,0 +1,17 @@
+{
+    "api_key": "c8771f32ce9ff32fe469d90327e9d5ee86832021f9491e2afc1dd3c7688ce60c",
+    "PAGE_SIZE": 500,
+    "base_url": "api.change.org",
+    "fields": [
+        "title",
+        "signature_count",
+        "goal",
+        "creator_name",
+        "organization_name",
+        "targets",
+        "overview",
+        "creator_url",
+        "created_at",
+        "category"
+    ]
+}
