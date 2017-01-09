@@ -12,6 +12,7 @@
         "overview",
         "creator_url",
         "created_at",
-        "category"
+        "category",
+        "status"
     ]
 }
