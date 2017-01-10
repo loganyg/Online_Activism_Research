@@ -1,11 +1,16 @@
 For new petitions:
-	- Scrape which petitions are new.
+	- Scrape which petitions are new, get IDs and add to petition ID list.
 	- For each petition:
 		- Make an entry in PETITIONS.
 		- Check if user is new.
-			- If yes, make entry in PETITIONERS.
-				- Get previous petitions.
-			- If no, do nothing, since we can extrapolate new
-			  petitions from PETITIONS.
-		- Make an entry in SIGNATURES
-——TODO——
+			- If yes, make entry in USERS.
+				- Get previous petitions, add them to USER_PETITIONS
+			- If no, add petition ID to USER_PETITIONS.
+		- Make an entry in SIGNATURES.
+		- For every target of the petition, make an entry in TARGETS. Will 
+		  to assign a Target ID.
+		- Make entries in PETITION_TARGETS.
+For existing petitions:
+	- Get new number of likes, make entry in SIGNATURES.
+	- Scrape which updates are new, makes entries in UPDATES.
+	- Scrape which reasons are new, make entries in REASONS.
