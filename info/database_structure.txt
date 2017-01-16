@@ -15,14 +15,16 @@ PETITIONS:
 	Signature Count : TBD, Will this map to SIGNATURES, with ~210 columns
 		(one for each projected day)   OR   Have it map to SIGNATURES
 		which stores a row for each day for each petition.
-UPDATES: 
+UPDATES: // Not necessary to create and manage until the end, to save on daily
+         // query time
 	Petition ID
 	Author Name
 	Author URL
 	Created At
 	Content
 	Title
-REASONS:
+REASONS: // Not necessary to create and manage until the end, to save on daily
+         // query time
 	Petition ID
 	Created At
 	Author Name
