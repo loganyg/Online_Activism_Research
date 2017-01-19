@@ -21,8 +21,9 @@ while foundend is False:
     parser = BeautifulSoup(response, "html.parser")
     for petition in parser.find_all("li", class_="petition"):
         url = petition["data-url"]
-        petition_id = json.loads(mq.makerequest({'petition_url':url}, "/v1/petitions/get_id"))['petition_id']
-        response_data = json.loads(mq.makerequest({'fields' : ','.join(mq.fields)}, "/v1/petitions/" + str(petition_id)))
+        #petition_id = json.loads(mq.makerequest({'petition_url':url}, "/v1/petitions/get_id"))['petition_id']
+        #response_data = json.loads(mq.makerequest({'fields' : ','.join(mq.petition_fields)}, "/v1/petitions/" + str(petition_id)))
+        mq.scrapeurl(url, 'petition')
         petition_created = time.strptime(response_data["created_at"], "%Y-%m-%dT%H:%M:%SZ")
         if petition_created > lastscrape:
             petition_info["petition_ids"].append(petition_id)
