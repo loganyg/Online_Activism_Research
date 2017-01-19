@@ -7,15 +7,38 @@ mysql_pw = config['mysql_pw']
 connection = mysql.connector.connect(user='loganyg', password=mysql_pw, host='127.0.01', database='changeorg_data')
 cursor = connection.cursor()
 
-def add_petition(p_json):
+def add_petition(json_body):
     add_petition = ("INSERT INTO petitions "
                     "(petition_id, url, title, goal, creator_name, creator_url, organization_name, organization_url, overview, created_at, category)"
                     "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         )
-    petition_data = (p_json['petition_id'], p_json['url'], p_json['title'], p_json['goal'], p_json['creator_name'], p_json['creator_url'],
-                     p_json['organization_name'], p_json['organization_url'], p_json['overview'], datetime.strptime(p_json['created_at'], "%Y-%m-%dT%H:%M:%SZ"),
-                     p_json['category'])
+    petition_data = (json_body['petition_id'], json_body['url'], json_body['title'], json_body['goal'], json_body['creator_name'], json_body['creator_url'],
+                     json_body['organization_name'], json_body['organization_url'], json_body['overview'], datetime.strptime(json_body['created_at'], "%Y-%m-%dT%H:%M:%SZ"),
+                     json_body['category'])
     cursor.execute(add_petition, petition_data)
     connection.commit()
+
+def add_user(json_body):
+    add_user = ("INSERT INTO users "
+                "(user_id, url, name, location)"
+                "VALUES (%s, %s, %s, %s)"
+        )
+    user_data = (json_body['user_id'], json_body['user_url'], json_body['name'], json_body['location'])
+    cursor.execute(add_user, user_data)
+    connection.commit()
+
+def add_target(json_body):
+    columns = ['name', 'title', 'type', 'target_area']
+    for col in columns:
+       if col not in json_body.keys():
+             json_body[col] = null;
+    add_target = ("INSERT INTO targets "
+                  "(" + ",".join(columns) + ")"
+                  "VALUES (%s, %s, %s, %s)"
+        )
+    target_data = tuple(map(lambda x: json_body[x], columns))
+    cursor.execute(add_target, target_data)
+    connection.commit()
+
 def close():
     connection.close()
