@@ -7,6 +7,18 @@ mysql_pw = config['mysql_pw']
 connection = mysql.connector.connect(user='loganyg', password=mysql_pw, host='127.0.01', database='changeorg_data')
 cursor = connection.cursor()
 
+def insert(json_body, table, fields, field_keys=[]):
+    command = ("INSERT INTO " + table + " "
+               "(" + ','.join(fields) + ")"
+               "VALUES (" + ','.join(['%s']*len(fields)) + ")"
+        )
+    if field_keys:
+        data = tuple(map(lambda x: json_body[x], field_keys))
+    else:
+        data = tuple(map(lambda x: json_body[x], fields))
+    cursor.execute(command, data)
+    connection.commit()
+
 def add_petition(json_body):
     add_petition = ("INSERT INTO petitions "
                     "(petition_id, url, title, goal, creator_name, creator_url, organization_name, organization_url, overview, created_at, category)"
