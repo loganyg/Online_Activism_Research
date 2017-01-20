@@ -28,6 +28,12 @@ while foundend is False:
         petition_id = petition_body['petition_id']
         petition_created = time.strptime(response_data["created_at"], "%Y-%m-%dT%H:%M:%SZ")
         if petition_created > lastscrape:
+            # ---+--- This is up in the air in terms of where to make the mySQL queries. Doing them with the scraping ---+----
+            # ---+--- of the petitions makes the program the most streamlined, but could increase the amount of time  ---+----
+            # ---+--- between the scraping of each petitionself.                                                      ---+----
+            # ---+--- Storing the petition data and then scraping all the necessary data before adding anything to the---+----
+            # ---+--- database would minimize the time between the scraping of petition data but would be less space  ---+----
+            # ---+--- efficientself.                                                                                  ---+----
             petition_info["petition_ids"].append(petition_id)
             # Add petition to the database.
             msq.add_petition(petition_body)
@@ -45,6 +51,7 @@ while foundend is False:
         else:
             foundend = True
     page += 1
+msq.close()
 petition_info["last_updated"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", scrapetime)
 with open("petitions.json", 'w') as out:
     json.dump(petition_info, out, indent=4)

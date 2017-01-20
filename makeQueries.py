@@ -71,8 +71,6 @@ def scrapepetition(url, out, updates=False, reasons=False):
         json.dump(json.loads(response_data), out, indent=4)
         out.write('\n')
 
-
-
 #print makerequest(additional_parameters, "/v1/petitions/get_id")
 #petition_id()
 #response_data = json.load(makerequest(additional_parameters, "/v1/petitions/" + petition_id))
