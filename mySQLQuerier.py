@@ -19,6 +19,11 @@ def insert(json_body, table, fields, field_keys=[]):
     cursor.execute(command, data)
     connection.commit()
 
+def add_column(col_name, table, datatype):
+    command = ("ALTER TABLE " + table + " ADD COLUMN " + col_name + " " + datatype)
+    cursor.execute(command)
+    connection.commit()
+
 def add_petition(json_body):
     add_petition = ("INSERT INTO petitions "
                     "(petition_id, url, title, goal, creator_name, creator_url, organization_name, organization_url, overview, created_at, category)"
