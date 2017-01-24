@@ -24,7 +24,7 @@ def add_petition(json_body):
                     "(petition_id, url, title, goal, creator_name, creator_url, organization_name, organization_url, overview, created_at, category)"
                     "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         )
-    petition_data = (json_body['petition_id'], json_body['url'], json_body['title'], json_body['goal'], json_body['creator_name'], json_body['creator_url'],
+    petition_data = (json_body['petition_id'], json_body['petition_url'], json_body['title'], json_body['goal'], json_body['creator_name'], json_body['creator_url'],
                      json_body['organization_name'], json_body['organization_url'], json_body['overview'], datetime.strptime(json_body['created_at'], "%Y-%m-%dT%H:%M:%SZ"),
                      json_body['category'])
     cursor.execute(add_petition, petition_data)
@@ -43,7 +43,7 @@ def add_target(json_body):
     columns = ['name', 'title', 'type', 'target_area']
     for col in columns:
        if col not in json_body.keys():
-             json_body[col] = null;
+             json_body[col] = None
     add_target = ("INSERT INTO targets "
                   "(" + ",".join(columns) + ")"
                   "VALUES (%s, %s, %s, %s)"

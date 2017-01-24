@@ -44,8 +44,10 @@ def scrapeuser(url):
 # For users it is preferred to use scrapeuser because the structure of the user URL allows the
 # get_id step to be omitted.
 def scrapeurl(url, epname):
-    ID = json.loads(makerequest({epname + '_url':url}, "/v1/%ss/get_id" % epname))[epname + '_id']
-    response_data = makerequest({'fields' : ','.join(config[epname + "_fields"])}, "/v1/users/" + str(ID))
+    url_key = epname + '_url'
+    response_data = makerequest({url_key:url}, "/v1/%ss/get_id" % epname)
+    ID = json.loads(response_data)[epname + '_id']
+    response_data = makerequest({'fields' : ','.join(config[epname + "_fields"])}, "/v1/%ss/%s" % (epname, str(ID)))
     body = json.loads(response_data)
     body[epname + '_id'] = ID
     body[epname + '_url'] = url
