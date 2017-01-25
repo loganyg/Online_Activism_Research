@@ -38,6 +38,8 @@ while foundend is False:
                 petition_info["petition_ids"].append(petition_id)
                 # Add petition to the database.
                 msq.add_petition(petition_body)
+                # Add entry for petition to the signatures table.
+                msq.insert({'petition_id': petition_id}, 'signatures', ['petition_id'])
                 # Add targets and the link between targets and petition to the database.
                 for target in petition_body['targets']:
                     msq.add_target(target)
