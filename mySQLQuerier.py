@@ -24,6 +24,11 @@ def add_column(col_name, table, datatype):
     cursor.execute(command)
     connection.commit()
 
+def update(table, set_col, set_val, compare_col, compare_val):
+    command = ("UPDATE " + table + " SET " + set_col + "=" + set_val + " WHERE " + compare_col + "=" + compare_val)
+    cursor.execute(command)
+    connection.commit()
+
 def add_petition(json_body):
     add_petition = ("INSERT INTO petitions "
                     "(petition_id, url, title, goal, creator_name, creator_url, organization_name, organization_url, overview, created_at, category)"
