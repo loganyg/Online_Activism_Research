@@ -8,9 +8,9 @@ import mySQLQuerier as msq
 #time.strptime("2015-07-12T16:44:24Z", "%Y-%m-%dT%H:%M:%SZ")
 petition_info = json.load(open("petitions.json"))
 lastscrape = time.strptime(petition_info["last_updated"], "%Y-%m-%dT%H:%M:%SZ")
-
 scrapetime = time.gmtime()
 start = time.time()
+
 page = 1
 foundend = False
 while foundend is False:
@@ -19,13 +19,15 @@ while foundend is False:
     time.sleep(5)
     response = driver.page_source
     parser = BeautifulSoup(response, "html.parser")
+    print "page: " + str(page)
+    for url in map(lambda x: x["data-url"], parser.find_all("li", class_="petition")):
+        print url
     for petition in parser.find_all("li", class_="petition"):
         url = petition["data-url"]
         #petition_id = json.loads(mq.makerequest({'petition_url':url}, "/v1/petitions/get_id"))['petition_id']
         #response_data = json.loads(mq.makerequest({'fields' : ','.join(mq.petition_fields)}, "/v1/petitions/" + str(petition_id)))
         petition_body = mq.scrapeurl(url, 'petition')
         petition_id = petition_body['petition_id']
-        print petition_body.keys()
         petition_created = time.strptime(petition_body['created_at'], "%Y-%m-%dT%H:%M:%SZ")
         if petition_created > lastscrape:
             # ---+--- This is up in the air in terms of where to make the mySQL queries. Doing them with the scraping ---+----
@@ -46,19 +48,21 @@ while foundend is False:
                     target_id = msq.cursor.lastrowid
                     msq.insert({'petition_id': petition_id, 'target_id': target_id}, 
                             'petition_targets', ['petition_id', 'target_id'])
-                # Add user as well as link between petition and use to the database.
-                user_body = mq.scrapeuser(petition_body['creator_url'])
-                msq.add_user(user_body)
+                # Add user as well as link between petition and use to the database if user url is non-null.
+                if petition_body['creator_url']:
+                    user_body = mq.scrapeuser(petition_body['creator_url'])
+                    msq.add_user(user_body)
                 msq.insert({'petition_id': petition_id, 'user_id': user_body['user_id']}, 
                             'petition_users', ['petition_id', 'user_id'])
-            except:
+            except Exception as e:
                 with open('error.json', 'a') as out:
+                    out.write('\n\n' + str(e))
                     json.dump(petition_body, out, indent=4)
-                raise
+                print str(e)
         else:
             foundend = True
     page += 1
-driver.quit()
+    driver.quit()
 msq.close()
 petition_info["last_updated"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", scrapetime)
 with open("petitions.json", 'w') as out:
