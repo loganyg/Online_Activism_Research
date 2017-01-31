@@ -51,6 +51,7 @@ def scrapeurl(url, epname):
     body = json.loads(response_data)
     body[epname + '_id'] = ID
     body[epname + '_url'] = url
+    body['scraped_at'] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     return body
 
 # DEPRECATED -- Used to scrape a URL and put the results into a text file in JSON form.
