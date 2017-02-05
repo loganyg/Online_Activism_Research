@@ -20,7 +20,6 @@ def makerequest(additional_params, request_url):
     parameters = additional_params
     parameters['api_key'] = api_key
     params = urllib.urlencode(parameters)
-
     conn = httplib.HTTPSConnection(base_url)
     conn.request("GET", request_url + "?" + params)
     #conn.request("GET", "/v1/petitions/get_id?%s" % params)
@@ -33,6 +32,8 @@ def makerequest(additional_params, request_url):
 def scrapeuser(url):
     spliturl = url.split("/")
     ID = spliturl[len(spliturl)-1]
+    if not ID.isdigit():
+        ID = json.loads(makerequest({"user_url" : url.replace('/u/', '/users/')}, "/v1/users/get_id"))['user_id']
     response_data = makerequest({}, "/v1/users/" + str(ID))
     body = json.loads(response_data)
     body['user_id'] = ID

@@ -1,9 +1,13 @@
 import json, time, os, sys
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from lxml import html
 from bs4 import BeautifulSoup
 import makeQueries as mq
 import mySQLQuerier as msq
+
 
 #time.strptime("2015-07-12T16:44:24Z", "%Y-%m-%dT%H:%M:%SZ")
 petition_info = json.load(open("petitions.json"))
@@ -15,15 +19,20 @@ page = 1
 foundend = False
 while foundend is False:
     driver = webdriver.Firefox()
+    driver.set_window_size(2,2)
     driver.get("https://www.change.org/petitions#most-recent/%s" % page)
-    time.sleep(5)
-    response = driver.page_source
-    parser = BeautifulSoup(response, "html.parser")
+    wait = WebDriverWait(driver, 10)
+    element = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME,'petition')))
+    #time.sleep(5)
+    #response = driver.page_source
+    #parser = BeautifulSoup(response, "html.parser")
     print "page: " + str(page)
-    for url in map(lambda x: x["data-url"], parser.find_all("li", class_="petition")):
-        print url
-    for petition in parser.find_all("li", class_="petition"):
-        url = petition["data-url"]
+    #for url in map(lambda x: x["data-url"], parser.find_all("li", class_="petition")):
+    #    print url
+    #for petition in parser.find_all("li", class_="petition"):
+    for petition in element:
+        #url = petition["data-url"]
+        url = petition.get_attribute("data-url")
         #petition_id = json.loads(mq.makerequest({'petition_url':url}, "/v1/petitions/get_id"))['petition_id']
         #response_data = json.loads(mq.makerequest({'fields' : ','.join(mq.petition_fields)}, "/v1/petitions/" + str(petition_id)))
         petition_body = mq.scrapeurl(url, 'petition')
@@ -35,7 +44,7 @@ while foundend is False:
             # ---+--- between the scraping of each petitionself.                                                      ---+----
             # ---+--- Storing the petition data and then scraping all the necessary data before adding anything to the---+----
             # ---+--- database would minimize the time between the scraping of petition data but would be less space  ---+----
-            # ---+--- efficientself.                                                                                  ---+----
+            # ---+--- efficient.                                                                                      ---+----
             try:
                 petition_info["petition_ids"].append(petition_id)
                 # Add petition to the database.
