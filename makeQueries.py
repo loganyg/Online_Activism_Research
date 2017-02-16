@@ -1,4 +1,5 @@
-import httplib, urllib, base64, json, sys, os, time
+import httplib, urllib, base64, json, sys, os, time, re
+from selenium import webdriver
 
 # Load various values from a config file so values are not
 # hard coded into this script.
@@ -8,6 +9,37 @@ PAGE_SIZE = config["PAGE_SIZE"]
 petition_fields = config["petition_fields"]
 user_fields = config["user_fields"]
 #request_url = '/v1/petitions/get_id'
+
+def getsponsors(urls):
+    driver = webdriver.Firefox()
+    driver.set_window_size(200,200)
+    if isinstance(urls, basestring):
+        urls = [urls,]
+    driver.get("%s/sponsors/new" % urls[0])
+    time.sleep(5)
+    elements = driver.find_elements_by_name("email")
+    for el in elements:
+        if el.is_displayed():
+            el.send_keys(config['spoof_username'])
+    elements = driver.find_elements_by_name("password")
+    for el in elements:
+        if el.is_displayed():
+            el.send_keys(config['spoof_pw'])
+            el.submit()
+    time.sleep(5)
+    urlsponsors = []
+    for url in urls:
+        driver.get("%s/sponsors/new" % url)
+        time.sleep(5)
+        elements = driver.find_elements_by_css_selector("p.mtm")
+        if len(elements) != 1:
+            print "Did not find a single number of elements!"
+            urlsponsors.append("")
+        else:
+            for el in elements:
+                urlsponsors.append(re.findall("\d+", el.text))
+    driver.quit()
+    return urlsponsors
 
 # Makes a request using the first param as the parameters other than
 # the API key in the form of a dictionary.

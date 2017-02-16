@@ -41,7 +41,7 @@ while foundend is False:
         if petition_created > lastscrape:
             # ---+--- This is up in the air in terms of where to make the mySQL queries. Doing them with the scraping ---+----
             # ---+--- of the petitions makes the program the most streamlined, but could increase the amount of time  ---+----
-            # ---+--- between the scraping of each petitionself.                                                      ---+----
+            # ---+--- between the scraping of each petition.                                                          ---+----
             # ---+--- Storing the petition data and then scraping all the necessary data before adding anything to the---+----
             # ---+--- database would minimize the time between the scraping of petition data but would be less space  ---+----
             # ---+--- efficient.                                                                                      ---+----
